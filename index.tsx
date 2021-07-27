@@ -1,37 +1,68 @@
 import React, { useEffect, useRef } from "react";
 
+type tPaperRenderLoop = (time?: number) => void;
+type tPaperScript = (canvas?: HTMLCanvasElement) => Promise<tPaperRenderLoop>;
+type tPaperPositionEvent = (entry: IntersectionObserverEntry) => void;
+type tPaperErrorEvent = (error: Error) => void;
+
 interface iPaperPropTypes {
-  script: (canvas?: HTMLCanvasElement) => Promise<(time?: number) => void>;
+  script: tPaperScript;
+  onExit?: tPaperPositionEvent;
+  onEntry?: tPaperPositionEvent;
+  onError?: tPaperErrorEvent;
   style?: React.CSSProperties;
 }
 
-export function Paper({ script, style }: iPaperPropTypes) {
+const IntersectionObserverOptions = {
+  threshold: 0.01,
+};
+
+export function Paper({ script, style, onExit, onEntry, onError }: iPaperPropTypes) {
   const ref = useRef(null);
 
   useEffect(() => {
     let observer: IntersectionObserver;
-    script(ref.current).then((callback) => {
-      let ID: number;
-      function animate(time: number) {
-        callback(time);
-        ID = requestAnimationFrame(animate);
-      }
+    let ID: number = 0;
 
-      observer = new IntersectionObserver(([{ isIntersecting }]) => {
-        if (!isIntersecting) {
-          cancelAnimationFrame(ID);
-        } else {
-          requestAnimationFrame(animate);
+    script(ref.current)
+      .then((callback) => {
+        function animate(time: number) {
+          callback(time);
+          ID = requestAnimationFrame(animate);
         }
-      });
 
-      observer.observe(ref.current);
-    });
+        observer = new IntersectionObserver(([entry]) => {
+          const { isIntersecting } = entry;
+          if (isIntersecting) {
+            if (onEntry) onEntry(entry);
+            ID = requestAnimationFrame(animate);
+          } else {
+            if (onExit) onExit(entry);
+            cancelAnimationFrame(ID);
+          }
+        }, IntersectionObserverOptions);
+
+        observer.observe(ref.current);
+      })
+      .catch((error: Error) => {
+        console.error(error);
+        if (onError) onError(error);
+        cancelAnimationFrame(ID);
+      });
 
     return () => {
       if (observer) observer.disconnect();
     };
-  }, [script]);
+  }, [script, ref]);
 
-  return <canvas ref={ref} style={style} />;
+  return (
+    <canvas
+      ref={ref}
+      style={{
+        width: "100%",
+        height: "100%",
+        ...style,
+      }}
+    />
+  );
 }

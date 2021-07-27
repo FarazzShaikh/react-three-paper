@@ -4,7 +4,7 @@
   <h1 align="center">react-three-paper</h1>
   
   <p align="center">
-    A paper-thin wrapper to use ThreeJS with React.
+    A paper-thin (880 byte), position aware wrapper for ThreeJS with React.
     <br />
     <a href="https://farazzshaikh.github.io/react-three-paper/example">View Demo</a>
     ·
@@ -39,5 +39,146 @@
 <br />
 
 
-# Docs
-## TODO
+## But why?
+
+I use this component a lot when creating React based apps. A prominant example is [my blog](https://github.com/FarazzShaikh/blog) and I am kinda sick of rewritting it again and again.
+
+But other than that, here are some actual uses over using something like `react-three-fiber`:
+
+- Very easily port Vanilla-JS scripts to React.
+- No special declarative syntax to learn.
+- Seperate UI logic from your core ThreeJS app.
+- It is **TINY**. ~260x smaller than `react-three-fiber`.
+
+In theory, all you have to do to convert Vanilla-JS examples to React ones via this library is wrap them in a `main()` function, tell ThreeJS to render on the given canvas and return the render loop as a function. [Read more.](#your-script)
+
+## Position aware...what?
+
+Yes, the canvas knows when it is out of the viewport and will pause your render loop. It will resume it when it is back in the viewport. This is **TREMENDOUSLY** helpful with performance. 
+
+For example, when creating long pages where you have multiple ThreeJS canvas components coming in and going out of the viewport.
+
+You can also tap these events and define custom behaviour.
+
+## Installation
+
+```bash
+npm install react-three-paper
+# or
+yarn add react-three-paper
+```
+
+## Usage
+
+Import the `Paper` component and use it like so
+
+```jsx
+import { Paper } from "../../build/index";
+import { main } from "./three/main.js"; // 👈 Your ThreeJS script
+
+export default function App() {
+    return (
+        <Paper 
+            script={main} // 👈 Pass it in here
+        />
+    )
+}
+```
+
+### Your script
+
+The `script` prop accepts a function, here is how that function should look.
+
+```js
+export async function main(canvas) {
+    //...Do ThreeJS stuff
+    const renderer = new THREE.WebGLRenderer({
+        canvas: canvas, // 👈 Use canvas as the ThreeJS canvas
+    });
+
+    // 👇 Use canavs dimentions insted of window
+    const aspectRatio = canvas.clientWidth / canvas.clientHeight;
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+    return (time) => {
+        //...Render loop without requestAnimationFrame()
+        renderer.render(scene, camera);
+    }
+}
+```
+
+Essentially, an `async` function that recieves a `canvas` element that is used as the ThreeJS canavs and returns a promise with your render loop. 
+
+The render loop musn't contain a call to `requestAnimationFrame` as this is handled by `react-three-paper`. **Pass this function directly into the `script` prop.**
+
+### Advanced Usage
+
+Here are some other props that `react-three-paper` provides.
+
+```jsx
+import { Paper } from "../../build/index";
+import { main } from "./three/main.js";
+
+export default function App() {
+    return (
+        <Paper 
+            script={main}
+            style={{...}} // 👈 CSS styles for the underlying <canvas>
+
+            // 👇 Events
+            onExit={(entry, ID) => {...}} // 👈 Fired when canvas exits the viewport
+            onEntry={(entry, ID) => {...}} // 👈 Fired when canvas enters the viewport
+            onError={(error, ID) => {...}} // 👈 Fired when there is a error
+        />
+    )
+}
+```
+
+By default...
+
+- `style`: Does nothing.
+- `onExit`: Stops the render loop.
+- `onEntry`: Starts the render loop.
+- `onError`: Logs the error and stops the render loop.
+
+
+| Prop | Required | Type | Discription |
+|-|-|-|-|
+| script | Yes | [`tPaperScript`](#tpaperscript) | Your ThreeJS script |
+| style | No | [`React.CSSProperties`](https://reactjs.org/docs/faq-styling.html) | CSS styles for the underlying `<canvas>` |
+| onExit | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas exits the viewport |
+| onEntry | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas enters the viewport |
+| onError | No | [`tPaperErrorEvent`](#tpapererrorevent) | Fired when there is a error |
+
+#### `tPaperRenderLoop`
+
+A function that recieves current time. By default, it is run every frame.
+
+```js
+(time?: number) => void
+```
+
+
+#### `tPaperScript`
+
+A function that recieves a HTML canvas and returns a promise that resolves to [tPaperRenderLoop](#tpaperrenderloop) (your render loop).
+
+```js
+(canvas?: HTMLCanvasElement) => Promise<tPaperRenderLoop>
+```
+
+#### `tPaperPositionEvent`
+
+A function that recieves the Intersection obeserver event's entry. Use this to have custom behaviour when the canvas goes out of and comes into the viewport.
+
+```js
+(entry: IntersectionObserverEntry) => void;
+```
+
+#### `tPaperErrorEvent`
+
+A function that is called when an error occurs. It recieves the error.
+
+```js
+(error: Error) => void;
+```

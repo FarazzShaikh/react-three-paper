@@ -3,6 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
+import cleanup from "rollup-plugin-cleanup";
 
 const packageJson = require("./package.json");
 
@@ -22,5 +23,5 @@ export default {
       strict: false,
     },
   ],
-  plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({ useTsconfigDeclarationDir: true })],
+  plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({ useTsconfigDeclarationDir: true }), terser(), cleanup({ comments: "none" })],
 };

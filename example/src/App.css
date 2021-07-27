@@ -1,12 +1,14 @@
 body {
     margin: 0;
     padding: 0;
+    height: 200vh;
 }
 
 canvas {
     cursor: grab;
     cursor: -moz-grab;
-    cursor:-webkit-grab
+    cursor:-webkit-grab;
+    pointer-events: none;
 }
 
 canvas:active {
