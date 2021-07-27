@@ -1,0 +1,34 @@
+{
+  "name": "react-three-paper",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "main": "build/index.js",
+  "module": "build/index.cjs",
+  "files": [
+    "build"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.2",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@types/react": "^17.0.15",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rollup": "^2.54.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.3.5"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}

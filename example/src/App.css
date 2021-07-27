@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor:-webkit-grab
+}
+
+canvas:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor:-webkit-grabbing
+}
+
+code {
+    color: rgb(255, 128, 128);
+}
+
+a {
+    color: rgb(116, 116, 255);
+}

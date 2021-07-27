@@ -1,0 +1,27 @@
+{
+  "name": "react-static-example-blank",
+  "private": true,
+  "scripts": {
+    "start": "react-static start",
+    "stage": "react-static build --staging",
+    "build": "react-static build",
+    "analyze": "react-static build --analyze",
+    "serve": "serve dist -p 3000"
+  },
+  "dependencies": {
+    "gl-noise": "^1.4.2",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-hot-loader": "^4.13.0",
+    "react-static": "^7.5.1",
+    "react-static-plugin-reach-router": "^7.5.1",
+    "react-static-plugin-sitemap": "^7.5.1",
+    "react-static-plugin-source-filesystem": "^7.5.1",
+    "stats.js": "^0.17.0",
+    "three": "^0.130.1",
+    "three-custom-shader-material": "^2.4.1"
+  },
+  "devDependencies": {
+    "serve": "^11.3.2"
+  }
+}
