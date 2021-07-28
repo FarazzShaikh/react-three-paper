@@ -1,7 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 
 type tPaperRenderLoop = (time?: number) => void;
-type tPaperScript = (canvas?: HTMLCanvasElement) => Promise<tPaperRenderLoop>;
+type tPaperCleanup = () => void;
+
+type tPaperScriptReturn = {
+  render: tPaperRenderLoop;
+  cleanup?: tPaperCleanup;
+};
+
+type tPaperScript = (canvas?: HTMLCanvasElement) => Promise<tPaperScriptReturn>;
 type tPaperPositionEvent = (entry: IntersectionObserverEntry) => void;
 type tPaperErrorEvent = (error: Error) => void;
 
@@ -19,41 +26,53 @@ const IntersectionObserverOptions = {
 
 export function Paper({ script, style, onExit, onEntry, onError }: iPaperPropTypes) {
   const ref = useRef(null);
+  const [scriptReturn, setScriptReturn] = useState(null as tPaperScriptReturn);
+
+  const execScript = useCallback(async (promise: Promise<tPaperScriptReturn>, callback: tPaperErrorEvent) => {
+    try {
+      const r = await promise;
+      setScriptReturn(r);
+    } catch (error) {
+      callback(error);
+    }
+  }, []);
 
   useEffect(() => {
-    let observer: IntersectionObserver;
     let ID: number = 0;
 
-    script(ref.current)
-      .then((callback) => {
-        function animate(time: number) {
-          callback(time);
-          ID = requestAnimationFrame(animate);
-        }
-
-        observer = new IntersectionObserver(([entry]) => {
-          const { isIntersecting } = entry;
-          if (isIntersecting) {
-            if (onEntry) onEntry(entry);
-            ID = requestAnimationFrame(animate);
-          } else {
-            if (onExit) onExit(entry);
-            cancelAnimationFrame(ID);
-          }
-        }, IntersectionObserverOptions);
-
-        observer.observe(ref.current);
-      })
-      .catch((error: Error) => {
+    if (scriptReturn === null) {
+      execScript(script(ref.current), (error: Error) => {
         console.error(error);
-        if (onError) onError(error);
         cancelAnimationFrame(ID);
+        if (onError) onError(error);
       });
+    } else {
+      const { render, cleanup } = scriptReturn;
 
-    return () => {
-      if (observer) observer.disconnect();
-    };
-  }, [script, ref]);
+      function animate(time: number) {
+        render(time);
+        ID = requestAnimationFrame(animate);
+      }
+
+      let observer = new IntersectionObserver(([entry]) => {
+        const { isIntersecting } = entry;
+        if (isIntersecting) {
+          if (onEntry) onEntry(entry);
+          ID = requestAnimationFrame(animate);
+        } else {
+          if (onExit) onExit(entry);
+          cancelAnimationFrame(ID);
+        }
+      }, IntersectionObserverOptions);
+
+      observer.observe(ref.current);
+
+      return () => {
+        observer.disconnect();
+        if (cleanup) cleanup();
+      };
+    }
+  }, [script, ref, scriptReturn]);
 
   return (
     <canvas

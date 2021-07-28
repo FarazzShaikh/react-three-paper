@@ -36,7 +36,7 @@ export function initScene(canvas) {
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
   // Append Renderer to the body
-  document.body.appendChild(renderer.domElement);
+  //   document.body.appendChild(renderer.domElement);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; // Enables inertia on the camera making it come to a more gradual stop.

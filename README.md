@@ -4,7 +4,7 @@
   <h1 align="center">react-three-paper</h1>
   
   <p align="center">
-    A paper-thin (880 byte), position aware wrapper for ThreeJS with React.
+    A paper-thin (~800 bytes), position aware wrapper for ThreeJS with React.
     <br />
     <a href="https://farazzshaikh.github.io/react-three-paper/example">View Demo</a>
     ·
@@ -41,16 +41,16 @@
 
 ## But why?
 
-I use this component a lot when creating React based apps. A prominant example is [my blog](https://github.com/FarazzShaikh/blog) and I am kinda sick of rewritting it again and again.
+I use this component a lot when creating React-based apps. A prominent example is [my blog](https://github.com/FarazzShaikh/blog) and I am kinda sick of rewriting it again and again.
 
 But other than that, here are some actual uses over using something like `react-three-fiber`:
 
 - Very easily port Vanilla-JS scripts to React.
 - No special declarative syntax to learn.
-- Seperate UI logic from your core ThreeJS app.
-- It is **TINY**. ~260x smaller than `react-three-fiber`.
+- Separate your UI logic from your core ThreeJS app.
+- It is **TINY**.
 
-In theory, all you have to do to convert Vanilla-JS examples to React ones via this library is wrap them in a `main()` function, tell ThreeJS to render on the given canvas and return the render loop as a function. [Read more.](#your-script)
+In theory, all you have to do to convert Vanilla-JS examples to React ones via this library is wrap them in a `main()` function, tell ThreeJS to render on the given canvas, and return the render loop as a function. [Read more.](#your-script)
 
 ## Position aware...what?
 
@@ -58,7 +58,7 @@ Yes, the canvas knows when it is out of the viewport and will pause your render 
 
 For example, when creating long pages where you have multiple ThreeJS canvas components coming in and going out of the viewport.
 
-You can also tap these events and define custom behaviour.
+You can also tap these events and define custom behavior.
 
 ## Installation
 
@@ -70,7 +70,7 @@ yarn add react-three-paper
 
 ## Usage
 
-Import the `Paper` component and use it like so
+Import the `Paper` component and use it like this:
 
 ```jsx
 import { Paper } from "../../build/index";
@@ -100,16 +100,26 @@ export async function main(canvas) {
     const aspectRatio = canvas.clientWidth / canvas.clientHeight;
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
-    return (time) => {
-        //...Render loop without requestAnimationFrame()
-        renderer.render(scene, camera);
-    }
+    function render() {...} //...Render loop without requestAnimationFrame()
+    function cleanup() {...} //...Any cleanup youd like (optional)
+
+    return { render, cleanup }
 }
 ```
 
-Essentially, an `async` function that recieves a `canvas` element that is used as the ThreeJS canavs and returns a promise with your render loop. 
+Essentially, a function that receives a `canvas` element (that is used as the ThreeJS canvas) and returns a promise which resolves a couple function.
 
-The render loop musn't contain a call to `requestAnimationFrame` as this is handled by `react-three-paper`. **Pass this function directly into the `script` prop.**
+- `render`: Your render loop without `requestAnimationFrame` as this is handled by `react-three-paper`.
+- `cleanup`: An optinal cleanup function without `cancleAnimationFrame`.
+
+**Pass this function directly into the `script` prop.**
+
+### Example
+
+An example app can be found within the `example` directory. It is also hosted [here](https://farazzshaikh.github.io/react-three-paper/example). See:
+
+- `example/src/App.js`: For `Paper` component usage. 
+- `example/src/three/main.js`: For how an example of how to format your main function.
 
 ### Advanced Usage
 
@@ -134,42 +144,56 @@ export default function App() {
 }
 ```
 
-By default...
+| Prop | Required | Type | Discription | Default |
+|-|-|-|-|-|
+| script | Yes | [`tPaperScript`](#tpaperscript) | Your ThreeJS script | No default behaviour |
+| style | No | [`React.CSSProperties`](https://reactjs.org/docs/faq-styling.html) | CSS  styles for the underlying `<canvas>` | Makes the canvas dimensions 100% of its container. |
+| onExit | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas exits the viewport | Stops the render loop when canvas exits viewport. |
+| onEntry | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas enters the viewport | Start the render loop when canvas enters viewport. |
+| onError | No | [`tPaperErrorEvent`](#tpapererrorevent) | Fired when there is a error | Logs the error and stops the render loop. |
 
-- `style`: Does nothing.
-- `onExit`: Stops the render loop.
-- `onEntry`: Starts the render loop.
-- `onError`: Logs the error and stops the render loop.
+**Note: Default behavioir cannot be overwritten, only extended.**
 
-
-| Prop | Required | Type | Discription |
-|-|-|-|-|
-| script | Yes | [`tPaperScript`](#tpaperscript) | Your ThreeJS script |
-| style | No | [`React.CSSProperties`](https://reactjs.org/docs/faq-styling.html) | CSS styles for the underlying `<canvas>` |
-| onExit | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas exits the viewport |
-| onEntry | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas enters the viewport |
-| onError | No | [`tPaperErrorEvent`](#tpapererrorevent) | Fired when there is a error |
+### Types
 
 #### `tPaperRenderLoop`
 
-A function that recieves current time. By default, it is run every frame.
+A function that receives current time. By default, it is run every frame.
 
 ```js
 (time?: number) => void
 ```
 
+#### `tPaperCleanup`
+
+An optional cleanup function.
+
+```js
+() => void
+```
+
+#### `tPaperScriptReturn`
+
+The return value of the function passed to the `script` prop.
+
+```ts
+type tPaperScriptReturn = {
+  render: tPaperRenderLoop;
+  cleanup: tPaperCleanup;
+};
+```
 
 #### `tPaperScript`
 
-A function that recieves a HTML canvas and returns a promise that resolves to [tPaperRenderLoop](#tpaperrenderloop) (your render loop).
+A function that recieves a HTML canvas and returns a promise that resolves to [tPaperScriptReturn](#tpaperscriptreturn) (your render loop).
 
 ```js
-(canvas?: HTMLCanvasElement) => Promise<tPaperRenderLoop>
+(canvas?: HTMLCanvasElement) => Promise<tPaperScriptReturn>
 ```
 
 #### `tPaperPositionEvent`
 
-A function that recieves the Intersection obeserver event's entry. Use this to have custom behaviour when the canvas goes out of and comes into the viewport.
+A function that receives the Intersection observer event's entry object. Use this to have custom behavior when the canvas goes out of and comes into the viewport. This function is called when the canvas enters or leaves the viewport.
 
 ```js
 (entry: IntersectionObserverEntry) => void;
@@ -177,8 +201,10 @@ A function that recieves the Intersection obeserver event's entry. Use this to h
 
 #### `tPaperErrorEvent`
 
-A function that is called when an error occurs. It recieves the error.
+This function is called when an error occurs. It receives the error.
 
 ```js
 (error: Error) => void;
 ```
+
+This module provides TypeScript type definitions.

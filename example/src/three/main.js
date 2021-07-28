@@ -101,5 +101,9 @@ export async function main(canvas) {
     stats.end();
   }
 
-  return render;
+  function cleanup() {
+    stats.dom.remove();
+  }
+
+  return { render, cleanup };
 }
