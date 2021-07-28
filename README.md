@@ -6,11 +6,9 @@
   <p align="center">
     A paper-thin (~800 bytes), position aware wrapper for ThreeJS with React.
     <br />
-    <a href="https://farazzshaikh.github.io/react-three-paper/example">View Demo</a>
+    <a href="https://farazzshaikh.github.io/react-three-paper/">View Demo</a>
     ·
     <a href="https://github.com/FarazzShaikh/react-three-paper/issues/new">Report Bug</a>
-    ·
-    <a href="https://farazzshaikh.github.io/react-three-paper/">API Docs</a>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/react-three-paper"><img align="center" src="https://img.shields.io/npm/v/react-three-paper?color=cc3534&style=for-the-badge" /></a>
