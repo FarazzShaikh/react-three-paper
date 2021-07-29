@@ -28,8 +28,32 @@ jobs:
           branch: gh-pages
           folder: example/dist
 
+                - name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
+        id: publish
+        if: ${{ env.deployment_status != 'failed' }}
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Get changes from changelog
+        if: ${{ steps.publish.outputs.type != 'none' }}
+        run: |
+          chmod +x scripts/getChange.sh
+          ./scripts/getChange.sh ${{steps.publish.outputs.version}} CHANGELOG.md > CHANGELOG.txt
+
+      - name: Release on GitHub
+        uses: softprops/action-gh-release@v1
+        if: ${{ steps.publish.outputs.type != 'none' }}
+        with:
+          body_path: CHANGELOG.txt
+          files: build/*
+          tag_name: ${{steps.publish.outputs.version}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
       - name: Push build to branch
         uses: EndBug/add-and-commit@v7
         with:
-          default_author: github_actions
+          default_author: github_acThere is no tracking information for the current branch.tions
           add: "build/* -f"
+          branch: master
