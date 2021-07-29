@@ -7,6 +7,11 @@ body {
 
 #root {
     width: 100%;
+    height: 100%;
+}
+
+.main {
+    width: 100%;
     height: 100vh;
 }
 
@@ -28,4 +33,24 @@ code {
 
 a {
     color: rgb(116, 116, 255);
+}
+
+.text-container {
+    height: 100vh;
+    padding: 25%;
+    text-align: justify;
+    background-color: rgba(43,48,50,1);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 768px) {
+    .text-container {
+        padding: 2em;
+    }
 }

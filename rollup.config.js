@@ -16,12 +16,6 @@ export default {
       sourcemap: true,
       strict: false,
     },
-    {
-      file: packageJson.module,
-      format: "cjs",
-      sourcemap: true,
-      strict: false,
-    },
   ],
-  plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({ useTsconfigDeclarationDir: true }), terser(), cleanup({ comments: "none" })],
+  plugins: [peerDepsExternal(), resolve(), typescript({ useTsconfigDeclarationDir: true }), terser(), cleanup({ comments: "none" })],
 };

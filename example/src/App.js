@@ -1,13 +1,11 @@
 import React from "react";
 import "./App.css";
-import { Paper } from "../../build/index";
+import { Paper } from "../lib/index";
 import { main } from "./three/main";
-import { Text } from "./Text";
 
 function App() {
   return (
-    <>
-      <Text />
+    <div className="main">
       <Paper
         script={main}
         style={{
@@ -17,7 +15,7 @@ function App() {
         onExit={() => console.log("Paper has left the viewport!")}
         onError={() => console.log("Oops! Something went wrong")}
       />
-    </>
+    </div>
   );
 }
 

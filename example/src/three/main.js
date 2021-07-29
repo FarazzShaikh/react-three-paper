@@ -1,20 +1,20 @@
 import * as THREE from "three";
 import { CustomShaderMaterial, TYPES } from "three-custom-shader-material";
-import { loadShadersCSM } from "gl-noise/build/glNoise.m";
+import { loadShadersCSM } from "gl-noise";
 import { initScene } from "./setup.js";
 import lights from "./lights.js";
 import Stats from "stats.js";
 
 const v = {
-  defines: "/shaders/particle_defines.glsl",
-  header: "/shaders/particle_header.glsl",
-  main: "/shaders/particle_main.glsl",
+  defines: "./static/shaders/particle_defines.glsl",
+  header: "./static/shaders/particle_header.glsl",
+  main: "./static/shaders/particle_main.glsl",
 };
 
 const f = {
-  defines: "/shaders/frag/defines.glsl",
-  header: "/shaders/frag/header.glsl",
-  main: "/shaders/frag/main.glsl",
+  defines: "./static/shaders/frag/defines.glsl",
+  header: "./static/shaders/frag/header.glsl",
+  main: "./static/shaders/frag/main.glsl",
 };
 
 export async function main(canvas) {
@@ -27,7 +27,7 @@ export async function main(canvas) {
   lights(scene);
 
   const loader = new THREE.TextureLoader();
-  const disk = loader.load("/textures/circle-sprite.png");
+  const disk = loader.load("./static/textures/circle-sprite.png");
 
   const geometry = new THREE.IcosahedronGeometry(4, 32);
   console.log(geometry.attributes.position.count);

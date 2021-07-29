@@ -3,18 +3,7 @@ import React from "react";
 export function Text() {
   return (
     <>
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          color: "white",
-          fontFamily: "sans-serif",
-          padding: "8px 16px",
-          width: "500px",
-          pointerEvents: "none",
-        }}
-      >
+      <div className="text-container">
         <h2>65k particles in React using Three.js</h2>
         <p>
           ThreeJS demo run using <code>react-three-paper</code> within a React app compiled with <code>react-static</code>. Canvas size and color set via JSX. Cursor set via CSS.
@@ -45,6 +34,7 @@ export function Text() {
             borderRadius: "50%",
             border: "none",
             cursor: "all-scroll",
+            margin: "1em",
           }}
         >
           <h4>Hover here and scroll!</h4>
