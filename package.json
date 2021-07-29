@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "rollup -c && cp build/index.js example/src/lib/index.js"
+    "build": "rollup -c && cp build/index.js example/lib/index.js"
   },
   "type": "module",
   "main": "build/index.js",
