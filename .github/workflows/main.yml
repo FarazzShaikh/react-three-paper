@@ -36,7 +36,6 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
 
       - name: Get changes from changelog
-        if: ${{ steps.publish.outputs.type != 'none' }}
         run: |
           chmod +x scripts/getChange.sh
           ./scripts/getChange.sh ${{steps.publish.outputs.version}} CHANGELOG.md > CHANGELOG.txt
