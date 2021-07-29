@@ -28,7 +28,7 @@ jobs:
           branch: gh-pages
           folder: example/dist
 
-                - name: Publish to NPM
+      - name: Publish to NPM
         uses: JS-DevTools/npm-publish@v1
         id: publish
         if: ${{ env.deployment_status != 'failed' }}
