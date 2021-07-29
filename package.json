@@ -1,6 +1,6 @@
 {
   "name": "react-three-paper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A paper-thin (~800 byte), position aware wrapper for ThreeJS with React.",
   "scripts": {
     "build": "rollup -c && cp build/index.js example/lib/index.js"
@@ -17,7 +17,12 @@
     "url": "https://github.com/FarazzShaikh/react-three-paper"
   },
   "homepage": "https://github.com/FarazzShaikh/react-three-paper",
-  "keywords": ["react", "threejs", "wrapper", "component"],
+  "keywords": [
+    "react",
+    "threejs",
+    "wrapper",
+    "component"
+  ],
   "author": "Faraz Shaikh",
   "license": "MIT",
   "devDependencies": {
