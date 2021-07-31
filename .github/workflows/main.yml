@@ -6,6 +6,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      INPUT_TOKEN: ""
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
