@@ -8443,38 +8443,6 @@
 
 	var ReactDOM = reactDom.exports;
 
-	function styleInject(css, ref) {
-	  if (ref === void 0) ref = {};
-	  var insertAt = ref.insertAt;
-
-	  if (!css || typeof document === 'undefined') {
-	    return;
-	  }
-
-	  var head = document.head || document.getElementsByTagName('head')[0];
-	  var style = document.createElement('style');
-	  style.type = 'text/css';
-
-	  if (insertAt === 'top') {
-	    if (head.firstChild) {
-	      head.insertBefore(style, head.firstChild);
-	    } else {
-	      head.appendChild(style);
-	    }
-	  } else {
-	    head.appendChild(style);
-	  }
-
-	  if (style.styleSheet) {
-	    style.styleSheet.cssText = css;
-	  } else {
-	    style.appendChild(document.createTextNode(css));
-	  }
-	}
-
-	var css_248z = "body {\n    margin: 0;\n    padding: 0;\n    height: 200vh;\n    width: 100vw;\n}\n\n#root {\n    width: 100%;\n    height: 100%;\n}\n\n.main {\n    width: 100%;\n    height: 100vh;\n}\n\ncanvas {\n    cursor: grab;\n    cursor: -moz-grab;\n    cursor:-webkit-grab;\n}\n\ncanvas:active {\n    cursor: grabbing;\n    cursor: -moz-grabbing;\n    cursor:-webkit-grabbing\n}\n\ncode {\n    color: rgb(255, 128, 128);\n}\n\na {\n    color: rgb(116, 116, 255);\n}\n\n.text-container {\n    height: 100vh;\n    padding: 25%;\n    text-align: justify;\n    background-color: rgba(43,48,50,1);\n    color: white;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\n\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n}\n\n@media only screen and (max-width: 768px) {\n    .text-container {\n        padding: 2em;\n    }\n}";
-	styleInject(css_248z);
-
 	const o$1 = {
 	  threshold: .01
 	};
@@ -8532,6 +8500,38 @@
 	    }
 	  });
 	}
+
+	function styleInject(css, ref) {
+	  if (ref === void 0) ref = {};
+	  var insertAt = ref.insertAt;
+
+	  if (!css || typeof document === 'undefined') {
+	    return;
+	  }
+
+	  var head = document.head || document.getElementsByTagName('head')[0];
+	  var style = document.createElement('style');
+	  style.type = 'text/css';
+
+	  if (insertAt === 'top') {
+	    if (head.firstChild) {
+	      head.insertBefore(style, head.firstChild);
+	    } else {
+	      head.appendChild(style);
+	    }
+	  } else {
+	    head.appendChild(style);
+	  }
+
+	  if (style.styleSheet) {
+	    style.styleSheet.cssText = css;
+	  } else {
+	    style.appendChild(document.createTextNode(css));
+	  }
+	}
+
+	var css_248z = "body {\n    margin: 0;\n    padding: 0;\n    height: 200vh;\n    width: 100vw;\n}\n\n#root {\n    width: 100%;\n    height: 100%;\n}\n\n.main {\n    width: 100%;\n    height: 100vh;\n}\n\ncanvas {\n    cursor: grab;\n    cursor: -moz-grab;\n    cursor:-webkit-grab;\n}\n\ncanvas:active {\n    cursor: grabbing;\n    cursor: -moz-grabbing;\n    cursor:-webkit-grabbing\n}\n\ncode {\n    color: rgb(255, 128, 128);\n}\n\na {\n    color: rgb(116, 116, 255);\n}\n\n.text-container {\n    height: 100vh;\n    padding: 25%;\n    text-align: justify;\n    background-color: rgba(43,48,50,1);\n    color: white;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\n\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n}\n\n@media only screen and (max-width: 768px) {\n    .text-container {\n        padding: 2em;\n    }\n}";
+	styleInject(css_248z);
 
 	/**
 	 * @license
