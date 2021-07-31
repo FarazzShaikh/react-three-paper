@@ -159,7 +159,7 @@ export default function App() {
 | onEntry | No | [`tPaperPositionEvent`](#tpaperpositionevent) | Fired when canvas enters the viewport | Start the render loop when canvas enters viewport. |
 | onError | No | [`tPaperErrorEvent`](#tpapererrorevent) | Fired when there is a error | Logs the error and stops the render loop. |
 
-**Note: Default behavioir cannot be overwritten, only extended.**
+**Note: Default behaviour cannot be overwritten, only extended.**
 
 ### Types
 

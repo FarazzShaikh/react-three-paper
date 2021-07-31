@@ -15,7 +15,14 @@ jobs:
           yarn install
           yarn build
 
+      - name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
+        id: publish
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
       - name: Generate example
+        if: ${{ steps.publish.outputs.type != 'none' }}
         run: |
           cd example
           yarn install
@@ -23,17 +30,11 @@ jobs:
           cd ..
 
       - name: Publish docs
+        if: ${{ steps.publish.outputs.type != 'none' }}
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: gh-pages
           folder: example/dist
-
-      - name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v1
-        id: publish
-        if: ${{ env.deployment_status != 'failed' }}
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
 
       - name: Get changes from changelog
         if: ${{ steps.publish.outputs.type != 'none' }}
