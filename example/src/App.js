@@ -1,6 +1,6 @@
 import React from "react";
+import { Paper } from "react-three-paper";
 import "./App.css";
-import { Paper } from "../lib/index";
 import { main } from "./three/main";
 
 function App() {

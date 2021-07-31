@@ -4,7 +4,7 @@
   <h1 align="center">react-three-paper</h1>
   
   <p align="center">
-    A paper-thin (~800 bytes), position aware wrapper for ThreeJS with React.
+    A paper-thin (~800 bytes<sup>*</sup>) and position-aware wrapper for ThreeJS in React.
     <br />
     <a href="https://farazzshaikh.github.io/react-three-paper/">View Demo</a>
     ·
@@ -36,6 +36,7 @@
 
 <br />
 
+<sup>*</sup> Not including the Source Map and types.
 
 ## But why?
 
@@ -66,13 +67,21 @@ npm install react-three-paper
 yarn add react-three-paper
 ```
 
+**`react-three-paper` requires `react >=16.8.0`**
+
+```bash
+npm install react
+# or
+yarn add react
+```
+
 ## Usage
 
 Import the `Paper` component and use it like this:
 
 ```jsx
-import { Paper } from "../../build/index";
-import { main } from "./three/main.js"; // 👈 Your ThreeJS script
+import { Paper } from "paper";
+import { main } from "./main.js"; // 👈 Your ThreeJS script
 
 export default function App() {
     return (
@@ -105,10 +114,10 @@ export async function main(canvas) {
 }
 ```
 
-Essentially, a function that receives a `canvas` element (that is used as the ThreeJS canvas) and returns a promise which resolves a couple function.
+Essentially, a function that receives a `canvas` element (that is used as the ThreeJS canvas) and returns a promise which resolves to a couple of functions.
 
 - `render`: Your render loop without `requestAnimationFrame` as this is handled by `react-three-paper`.
-- `cleanup`: An optinal cleanup function without `cancleAnimationFrame`.
+- `cleanup`: An optional cleanup function without `cancleAnimationFrame`.
 
 **Pass this function directly into the `script` prop.**
 
@@ -117,7 +126,7 @@ Essentially, a function that receives a `canvas` element (that is used as the Th
 An example app can be found within the `example` directory. It is also hosted [here](https://farazzshaikh.github.io/react-three-paper/example). See:
 
 - `example/src/App.js`: For `Paper` component usage. 
-- `example/src/three/main.js`: For how an example of how to format your main function.
+- `example/src/three/main.js`: For an example of how to format your main function.
 
 ### Advanced Usage
 
@@ -172,7 +181,7 @@ An optional cleanup function.
 
 #### `tPaperScriptReturn`
 
-The return value of the function passed to the `script` prop.
+The return value of the function is passed to the `script` prop.
 
 ```ts
 type tPaperScriptReturn = {
