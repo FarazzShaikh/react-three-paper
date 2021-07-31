@@ -7,7 +7,7 @@
   },
   "type": "module",
   "main": "build/paper.js",
-  "types": "build/paper.d.ts",
+  "types": "build/index.d.ts",
   "files": [
     "build/*",
     "README.md",
