@@ -22,7 +22,6 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
 
       - name: Generate example
-        if: ${{ steps.publish.outputs.type != 'none' }}
         run: |
           cd example
           yarn install
@@ -30,21 +29,18 @@ jobs:
           cd ..
 
       - name: Publish docs
-        if: ${{ steps.publish.outputs.type != 'none' }}
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: gh-pages
           folder: example/dist
 
       - name: Get changes from changelog
-        if: ${{ steps.publish.outputs.type != 'none' }}
         run: |
           chmod +x scripts/getChange.sh
           ./scripts/getChange.sh ${{steps.publish.outputs.version}} CHANGELOG.md > CHANGELOG.txt
 
       - name: Release on GitHub
         uses: softprops/action-gh-release@v1
-        if: ${{ steps.publish.outputs.type != 'none' }}
         with:
           body_path: CHANGELOG.txt
           files: build/*
