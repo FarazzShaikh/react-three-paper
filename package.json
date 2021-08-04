@@ -1,6 +1,6 @@
 {
   "name": "react-three-paper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A paper-thin (~800 bytes) and position-aware wrapper for ThreeJS in React.",
   "scripts": {
     "build": "rollup -c"
