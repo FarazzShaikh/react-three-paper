@@ -69,6 +69,7 @@ export function Paper({ script, style, onExit, onEntry, onError }: iPaperPropTyp
 
       return () => {
         observer.disconnect();
+        if (ID) cancelAnimationFrame(ID);
         if (cleanup) cleanup();
       };
     }
